@@ -1,0 +1,24 @@
+version: "3"
+services:
+  jenkins:
+    container_name: ${JENKINS_NAME}
+    image: jenkinstestrail
+    build: ./jenkins
+    user: root
+    env_file: .env
+    ports:
+      - ${JENKINS_HOST_PORT}:8080
+      - 50000:50000
+    environment:
+      - JAVA_OPTS=-Xmx2048m
+      - JENKINS_SLAVE_AGENT_PORT=50000
+      - COMPOSE_CONVERT_WINDOWS_PATHS=1
+    volumes:
+      - ${USER_HOME_WINDOWS}/jenkins_testrail:/var/jenkins_home
+      - ${USER_HOME_WINDOWS}/home:/home
+      - /var/run/docker.sock:/var/run/docker.sock
+  pangolin:
+    container_name: pangolin
+    build: ./pangolin
+    ports:
+      - ${PANGOLIN_HOST_PORT}:8080
